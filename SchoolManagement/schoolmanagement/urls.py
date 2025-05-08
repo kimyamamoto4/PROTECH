@@ -40,6 +40,7 @@ urlpatterns = [
     path('add-teacher', views.add_teacher_view, name='add-teacher'),
     path('supervisor-students', views.supervisor_students_view, name='supervisor-students'),
     path('add-student', views.add_student_view, name='add-student'),
+    path('add-student/', views.add_student, name='add-student'),
     path('edit-student/<int:lrn>/', views.edit_student_view, name='edit-student'),
     path('delete-student/<int:lrn>/', views.delete_student_view, name='delete-student'),
     path('edit-school/<int:id>/', views.edit_school_view, name='edit-school'),
@@ -66,3 +67,5 @@ urlpatterns = [
     path('export-attendance/', export_attendance, name='export-attendance'),
     path('device-selection/', views.device_selection, name='device_selection'),
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

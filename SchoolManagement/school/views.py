@@ -6,6 +6,8 @@ import shutil
 import uuid
 from functools import wraps
 import csv
+import base64
+from django.core.files.base import ContentFile
 
 import cv2
 from django.conf import settings
@@ -24,7 +26,6 @@ from .models import School, CustomUser, Student, Section, Attendance
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.timezone import localtime
-import base64
 
 from . import forms, models
 
@@ -1242,3 +1243,49 @@ from django.shortcuts import render
 def device_selection(request):
     """Render the device selection page."""
     return render(request, 'system/device_selection.html')
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Student
+
+def add_student(request):
+    if request.method == 'POST':
+        # Get form data
+        student_lrn = request.POST.get('student_lrn')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        school_id = request.POST.get('school')
+        grade = request.POST.get('grade')
+        section_id = request.POST.get('section')
+        guardian = request.POST.get('guardian')
+        guardian_phone = request.POST.get('guardian_phone')
+        guardian_email = request.POST.get('guardian_email')
+        photo_data = request.POST.get('photo')  # Base64-encoded photo
+
+        # Decode and save the photo
+        if photo_data:
+            format, imgstr = photo_data.split(';base64,')
+            ext = format.split('/')[-1]
+            photo_file = ContentFile(base64.b64decode(imgstr), name=f"{student_lrn}.{ext}")
+
+        # Save the student to the database
+        try:
+            student = Student.objects.create(
+                lrn=student_lrn,
+                first_name=first_name,
+                last_name=last_name,
+                section_id=section_id,
+                guardian=guardian,
+                guardian_phone=guardian_phone,
+                guardian_email=guardian_email,
+            )
+            if photo_data:
+                student.photo.save(photo_file.name, photo_file)
+
+            messages.success(request, 'Student added successfully!')
+            return redirect('admin-students')
+        except Exception as e:
+            messages.error(request, f'Error adding student: {e}')
+            return redirect('admin-students')
+
+    return render(request, 'system/students.html')

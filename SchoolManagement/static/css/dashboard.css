@@ -341,6 +341,155 @@ body:not(.dark-mode) .nav ul li:hover {
   opacity: 0.5; /* Optional: Add transparency for better readability */
 }
 
+/* Add Button */
+.add-btn {
+  background-color: #3b82f6;
+  color: #ffffff;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.add-btn:hover {
+  background-color: #2563eb;
+  transform: translateY(-2px);
+}
+
+/* Modal Styling */
+/* Hide modal by default */
+.modal {
+  display: none; /* Ensure the modal is hidden initially */
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh; /* Limit the height */
+  overflow-y: auto; /* Add vertical scrollbar */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Save Button */
+.save-btn {
+  background-color: #3b82f6;
+  color: #ffffff;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}
+
+.save-btn:hover {
+  background-color: #2563eb;
+}
+
+/* Form Styling */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.form-input,
+.form-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.form-input:focus,
+.form-select:focus {
+  border-color: #3b82f6;
+  outline: none;
+  box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+}
+
+/* Photo Capture Section */
+.photo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.capture-btn,
+.recapture-btn {
+  background-color: #3b82f6;
+  color: #ffffff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.capture-btn:hover,
+.recapture-btn:hover {
+  background-color: #2563eb;
+}
+
+/* Fix inverted camera feed and adjust size */
+#camera-feed, #captured-photo {
+  width: 100%;
+  max-width: 250px; /* Adjust the size */
+  height: auto; /* Maintain aspect ratio */
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  transform: scaleX(-1); /* Flip the video horizontally */
+  -webkit-transform: scaleX(-1); /* For Safari compatibility */
+}
+
+/* Save Button */
+.save-btn {
+  background-color: #3b82f6;
+  color: #ffffff;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}
+
+.save-btn:hover {
+  background-color: #2563eb;
+}
+
 /* Dark Mode Overrides */
 body.dark-mode .stat-card,
 body.dark-mode .portfolio-card,
@@ -366,9 +515,9 @@ body.dark-mode .content {
 }
 
 /* Updated Table Styling with Borders */
+/* Remove scrollbar from the table */
 .table-container {
-  margin-top: 20px;
-  overflow-x: auto; /* Ensure responsiveness for smaller screens */
+  overflow: hidden; /* Disable scrolling */
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: var(--bg); /* Match the main background */
@@ -399,6 +548,7 @@ body.dark-mode .content {
 
 .data-table tbody {
   background-color: #ffffff; /* White body */
+  overflow-y: hidden; /* Disable vertical scrolling */
 }
 
 .data-table tbody tr {
@@ -459,6 +609,24 @@ body.dark-mode .content {
 
 .delete-btn:hover {
   background-color: #dc2626;
+}
+
+/* Remove Button Styling */
+.remove-btn {
+  background-color: #ef4444; /* Red background */
+  color: #ffffff; /* White text */
+  border: none;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-block; /* Ensure it is displayed when not hidden */
+  transition: background-color 0.3s ease;
+}
+
+.remove-btn:hover {
+  background-color: #dc2626; /* Darker red on hover */
 }
 
 /* Search Container Styling */
@@ -531,4 +699,141 @@ body.dark-mode .content {
     color: #334155; /* Black text for better readability */
     margin-right: 10px;
   }
+}
+
+/* Photo Capture Section */
+.photo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+#camera-feed {
+  width: 100%;
+  max-width: 300px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  transform: scaleX(-1); /* Flip the video horizontally */
+  -webkit-transform: scaleX(-1); /* For Safari compatibility */
+}
+
+#photo-canvas {
+  width: 100%;
+  max-width: 300px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.photo-preview {
+  width: 100%;
+  max-width: 300px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.photo-actions button {
+  background-color: #3b82f6;
+  color: #ffffff;
+  border: none;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.photo-actions button:hover {
+  background-color: #2563eb;
+}
+
+.capture-btn,
+.recapture-btn {
+  background-color: #3b82f6;
+  color: #ffffff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.capture-btn:hover,
+.recapture-btn:hover {
+  background-color: #2563eb;
+}
+
+/* Profile Dropdown */
+.profile-dropdown {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e5e7eb;
+  transition: border-color 0.3s ease;
+}
+
+.profile-pic:hover {
+  border-color: #3b82f6;
+}
+
+.profile-menu {
+  display: none;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  z-index: 1000;
+  width: 200px;
+}
+
+.profile-menu p {
+  margin: 0;
+  padding: 10px;
+  font-size: 0.9rem;
+  color: #334155;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.profile-menu p:last-child {
+  border-bottom: none;
+}
+
+.profile-menu .logout-btn {
+  background-color: #ef4444;
+  color: #ffffff;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}
+
+.profile-menu .logout-btn:hover {
+  background-color: #dc2626;
+}
+
+/* View Only Styling */
+.view-only {
+  color: gray;
+  font-style: italic;
+}
+
+.view-only-tag {
+  font-size: 0.8em;
+  color: #888;
 }

@@ -52,8 +52,8 @@
       <header class="top-bar">
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <h1>Dashboard Overview</h1>
-          <div style="display: flex; gap: 15px; align-items: center;">
-            <!-- Modern Dark Mode Toggle -->
+          <div style="display: flex; align-items: center; gap: 15px;">
+            <!-- Dark Mode Toggle -->
             <div class="theme-toggle" title="Toggle Dark Mode">
               <input type="checkbox" id="darkToggleCheckbox" hidden>
               <label for="darkToggleCheckbox" class="toggle-label">
@@ -62,10 +62,9 @@
                 <span class="toggle-ball"></span>
               </label>
             </div>
-
-            <!-- Profile -->
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <img src="{% static 'images/user.png' %}" alt="User" style="width: 36px; height: 36px; border-radius: 50%;">
+            <!-- Profile Section -->
+            <div class="user-section" style="display: flex; align-items: center; gap: 10px;">
+              <img src="{% static 'images/user-default.png' %}" alt="Profile" class="profile-pic" style="width: 36px; height: 36px; border-radius: 50%;">
               <span>{{ user.username|default:"Admin" }}</span>
             </div>
           </div>

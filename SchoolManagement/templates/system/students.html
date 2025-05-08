@@ -6,42 +6,72 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ user_role|title }} - Manage Students</title>
   <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-  <div class="dashboard">
-    <!-- Include the dynamic sidebar -->
-    {% with active_page='students' %}
-    {% include 'components/sidebar.html' %}
-    {% endwith %}
+  <!-- Background Video -->
+  <video autoplay muted loop class="background-video">
+    <source src="{% static 'images/background.mp4' %}" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
 
-    <!-- Navigation -->
-    <nav class="nav">
-      <ul>
-        <li>
-          <a href="{% url 'admin-dashboard' %}"><i class="fas fa-home"></i><span>Dashboard</span></a>
-        </li>
-        <li class="active">
-          <a href="{% url 'admin-teachers' %}"><i class="fas fa-chalkboard-teacher"></i><span>Teachers</span></a>
-        </li>
-        <li>
-          <a href="{% url 'admin-students' %}"><i class="fas fa-user-graduate"></i><span>Students</span></a>
-        </li>
-        <li>
-          <a href="{% url 'admin-attendance' %}"><i class="fas fa-calendar-check"></i><span>Attendance</span></a>
-        </li>
-        <li>
-          <a href="{% url 'admin-settings' %}"><i class="fas fa-cog"></i><span>Settings</span></a>
-        </li>
-      </ul>
-    </nav>
+  <div class="dashboard">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo-container">
+        <img src="{% static 'images/logo white.png' %}" alt="Logo" class="logo">
+      </div>
+      <nav class="nav">
+        <ul>
+          <li>
+            <a href="{% url 'admin-dashboard' %}"><i class="fas fa-home"></i><span>Dashboard</span></a>
+          </li>
+          <li>
+            <a href="{% url 'admin-teachers' %}"><i class="fas fa-chalkboard-teacher"></i><span>Teachers</span></a>
+          </li>
+          <!-- Sidebar Students Button -->
+          <li class="active">
+            <a href="{% url 'admin-students' %}">
+              <i class="fas fa-user-graduate"></i><span>Students</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'admin-attendance' %}"><i class="fas fa-calendar-check"></i><span>Attendance</span></a>
+          </li>
+          <li>
+            <a href="{% url 'admin-settings' %}"><i class="fas fa-cog"></i><span>Settings</span></a>
+          </li>
+        </ul>
+      </nav>
+      <div class="logout-section">
+        <button class="logout-btn" type="button" onclick="window.location.href='{% url 'logout' %}'">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+    </aside>
 
     <!-- Main Content -->
     <main class="content">
       <header class="top-bar">
-        <h1>ATTENDANCE MONITORING SYSTEM</h1>
-        <div class="user-section">
-          <img src="{% static 'images/user-default.png' %}" alt="Profile" class="profile-pic">
-          <button class="logout-btn" type="button" onclick="window.location.href='{% url 'logout' %}'">Logout</button>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h1>Manage Students</h1>
+          <!-- Toggle and User Profile Section -->
+          <div style="display: flex; align-items: center; gap: 15px;">
+            <!-- Theme Toggle -->
+            <div class="theme-toggle" title="Toggle Dark Mode">
+              <input type="checkbox" id="darkToggleCheckbox" hidden>
+              <label for="darkToggleCheckbox" class="toggle-label">
+                <i class="fas fa-sun"></i>
+                <i class="fas fa-moon"></i>
+                <span class="toggle-ball"></span>
+              </label>
+            </div>
+            <!-- User Profile -->
+            <div class="user-section" style="display: flex; align-items: center; gap: 10px;">
+              <img src="{% static 'images/user-default.png' %}" alt="Profile" class="profile-pic" style="width: 35px; height: 35px; border-radius: 50%;">
+              <span>{{ user.username }}</span>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -49,11 +79,15 @@
         <div class="header">
           <h2>Manage Students</h2>
           <div class="search-container">
-            <input type="text" class="search-bar" placeholder="Search">
+            <input type="text" id="studentFilter" class="search-bar" placeholder="Search Student Name">
             <button class="filter-btn">
-              <i class="icon-filter"></i>
+              <i class="fas fa-search"></i>
             </button>
           </div>
+          <!-- Add Student Button -->
+          {% if not view_only %}
+            <button class="add-btn" onclick="openAddStudentModal()">+ Add Student</button>
+          {% endif %}
         </div>
 
         <div class="table-container">
@@ -75,262 +109,163 @@
             <tbody>
               {% for student in students %}
               <tr>
-                  <td>{{ forloop.counter }}</td>
-                  <td>{{ student.first_name }} {{ student.middle_name }} {{ student.last_name }}</td>
-                  <td>{{ student.lrn }}</td>
-                  <td>{{ student.section.school.name }}</td>
-                  <td>{{ student.section.grade }}</td>
-                  <td>{{ student.section.name }}</td>
-                  <td>{{ student.guardian }}</td>
-                  <td>{{ student.guardian_email }}</td>
-                  <td>{{ student.guardian_phone }}</td>
-                  <td>
-                      <button class="edit-btn" onclick="openEditModal('{{ student.lrn }}', '{{ student.first_name }}', '{{ student.middle_name }}', '{{ student.last_name }}', '{{ student.section.school.id }}', '{{ student.section.grade }}', '{{ student.section.id }}', '{{ student.guardian }}', '{{ student.guardian_email }}', '{{ student.guardian_phone }}')">Edit</button>
-                      <form method="POST" action="{% url 'delete-student' student.lrn %}" style="display: inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="delete-btn">Delete</button>
-                      </form>
-                  </td>
+                <td data-label="#">{{ forloop.counter }}</td>
+                <td data-label="Student Name">{{ student.first_name }} {{ student.middle_name }} {{ student.last_name }}</td>
+                <td data-label="Student LRN">{{ student.lrn }}</td>
+                <td data-label="School Name">{{ student.section.school.name }}</td>
+                <td data-label="Grade">{{ student.section.grade }}</td>
+                <td data-label="Section">{{ student.section.name }}</td>
+                <td data-label="Guardian">{{ student.guardian }}</td>
+                <td data-label="Email">{{ student.guardian_email }}</td>
+                <td data-label="Phone">{{ student.guardian_phone }}</td>
+                <td data-label="Actions">
+                  {% if not view_only %}
+                    <button class="edit-btn">Edit</button>
+                    <form method="POST" action="{% url 'delete-student' student.lrn %}" style="display: inline;">
+                      {% csrf_token %}
+                      <button type="submit" class="delete-btn">Delete</button>
+                    </form>
+                  {% else %}
+                    <span class="view-only">View Only</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="10">No students found.</td>
               </tr>
               {% endfor %}
-            </tbody>                         
+            </tbody>
           </table>
         </div>
-
-        <!-- Blue Add button -->
-        <button class="add-btn" onclick="openAddModal()">Add</button>
       </section>
-      
-      <!-- Add/Edit Student Modal -->
-      <div id="student-modal" class="modal">
+
+      <!-- Add Student Modal -->
+      <div id="add-student-modal" class="modal">
         <div class="modal-content">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-            <h3 id="modal-title">Add Student</h3>
-            <form id="student-form" method="POST" action="{% url 'add-student' %}" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="face-photo">Face Photo</label>
-                    <div class="photo-container">
-                        <img id="face-photo-preview" src="{% static 'images/indexb.jpg' %}" alt="Face Photo" class="photo-preview">
-                        <div class="photo-actions">
-                            <button type="button" id="captureBtn" onclick="openCaptureModal()">Capture</button>
-                        </div>
-                    </div>
-                    <input type="file" id="face-photo" name="face_photo" accept="image/*" style="display: none;" onchange="previewPhoto(event)">
+          <span class="close-btn" onclick="closeAddStudentModal()">&times;</span>
+          <h3 class="modal-title">Add Student</h3>
+          <div class="modal-body">
+            <form id="add-student-form" method="POST" action="{% url 'add-student' %}" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="face-photo">Face Photo</label>
+                <div class="photo-container">
+                  <video id="camera-feed" autoplay playsinline style="width: 100%; height: auto;"></video>
+                  <canvas id="photo-canvas" style="display: none;"></canvas>
+                  <img id="captured-photo" src="" alt="Captured Photo" style="display: none;">
+                  <div class="photo-actions">
+                    <button type="button" class="capture-btn" onclick="captureImage()">Capture</button>
+                    <button type="button" class="remove-btn" onclick="removeCapturedImage()" style="display: none;">Remove</button>
+                  </div>
                 </div>
-                <div class="form-group-row">
-                    <div class="form-group">
-                        <label for="student-lrn">Student LRN</label>
-                        <input type="text" id="student-lrn" name="student_lrn" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="last-name">Last Name</label>
-                        <input type="text" id="last-name" name="last_name" required>
-                    </div>
-                </div>
-                <div class="form-group-row">
-                    <div class="form-group">
-                        <label for="first-name">First Name</label>
-                        <input type="text" id="first-name" name="first_name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="middle-name">Middle Name</label>
-                        <input type="text" id="middle-name" name="middle_name">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="school">School:</label>
-                    <select id="school" name="school" onchange="updateSections()">
-                        <option value="">Select a School</option>
-                        {% for school in schools %}
-                            <option value="{{ school.id }}" required>{{ school.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="form-group-row">
-                    <div class="form-group">
-                        <label for="grade">Grade:</label>
-                        <select id="grade" name="grade" onchange="updateSections()">
-                            <option value="">Select a Grade</option>
-                            {% for grade in grades %}
-                                <option value="{{ grade }}" required>Grade {{ grade }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="section">Section:</label>
-                        <select id="section" name="section">
-                            <option value="">Select a Section</option>
-                            {% for section in sections %}
-                                <option value="{{ section.id }}" data-school="{{ section.school.id }}" data-grade="{{ section.grade }}" required>
-                                    {{ section.name }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="guardian">Guardian</label>
-                    <input type="text" id="guardian" name="guardian" required>
-                </div>
-                <div class="form-group-row">
-                    <div class="form-group">
-                        <label for="guardian_phone">Phone</label>
-                        <input type="integer" id="guardian_phone" name="guardian_phone" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="guardian_email">Email</label>
-                        <input type="email" id="guardian_email" name="guardian_email" required>
-                    </div>
-                </div>
-                <button type="submit" class="save-btn">Save</button>
+                <input type="hidden" id="photo" name="photo">
+              </div>
+              <div class="form-group">
+                <label for="student-lrn">Student LRN</label>
+                <input type="text" id="student-lrn" name="student_lrn" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label for="first-name">First Name</label>
+                <input type="text" id="first-name" name="first_name" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label for="last-name">Last Name</label>
+                <input type="text" id="last-name" name="last_name" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label for="school">School</label>
+                <select id="school" name="school" class="form-select" required>
+                  <option value="">Select a School</option>
+                  {% for school in schools %}
+                  <option value="{{ school.id }}">{{ school.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="grade">Grade</label>
+                <select id="grade" name="grade" class="form-select" required>
+                  <option value="">Select a Grade</option>
+                  {% for grade in grades %}
+                  <option value="{{ grade }}">Grade {{ grade }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="section">Section</label>
+                <select id="section" name="section" class="form-select" required>
+                  <option value="">Select a Section</option>
+                  {% for section in sections %}
+                  <option value="{{ section.id }}">{{ section.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="guardian">Guardian</label>
+                <input type="text" id="guardian" name="guardian" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label for="guardian-phone">Guardian Phone</label>
+                <input type="text" id="guardian-phone" name="guardian_phone" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label for="guardian-email">Guardian Email</label>
+                <input type="email" id="guardian-email" name="guardian_email" class="form-input" required>
+              </div>
+              <button type="submit" class="save-btn">Save</button>
             </form>
-        </div>
-      </div>
-
-      <!-- Capture Modal -->
-      <div id="capture-photo-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" id="close-modal-btn" onclick="closeCaptureModal()">&times;</span>
-            <h3>Smile!</h3>
-            <div class="video-container">
-                <video id="camera-feed" style="transform: scaleX(-1);" autoplay width="100%" height="auto"></video>
-                <img id="captured-photo" src="" alt="Captured Photo" style="display: none; width: 100%; height: auto;" />
-            </div>
-            <canvas id="photo-canvas" style="display: none;"></canvas>
-            <div class="photo-actions">
-                <button type="button" class="btn" id="capture-btn" onclick="captureImage()">Capture</button>
-                <button type="button" class="btn" id="recapture-btn" onclick="recaptureImage()" style="display: none;">Recapture</button>
-                <button type="button" class="btn" id="save-btn" onclick="saveImage()" style="display: none;">Save</button>
-            </div>
-        </div>
-      </div>
-
-      <!-- Confirmation Modal -->
-      <div id="confirmation-modal" class="modal">
-          <div class="modal-content">
-              <span class="close-btn" onclick="closeConfirmation()">&times;</span>
-              <h3>Student Added Successfully!</h3>
           </div>
+        </div>
       </div>
-
-      <footer class="footer">
-        <div class="copy">
-          <p>© 2024 Attendance Monitoring System. All Rights Reserved.</p>
-        </div>
-        <div class="date-time">
-          <p id="current-date-time"></p>
-        </div>
-      </footer>
     </main>
   </div>
-    
 
+  <script>
+    // Toggle dark mode
+    document.getElementById('darkToggleCheckbox').addEventListener('change', () => {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    });
+
+    // Load dark mode state from localStorage
+    window.addEventListener('DOMContentLoaded', () => {
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('darkToggleCheckbox').checked = true;
+      }
+    });
+
+    function openAddStudentModal() {
+      const modal = document.getElementById('add-student-modal');
+      modal.style.display = 'flex'; // Show the modal
+      startCamera(); // Start the camera when the modal opens
+    }
+
+    function openCaptureModal() {
+      const modal = document.getElementById('add-student-modal');
+      modal.style.display = 'flex'; // Show the modal
+      startCamera(); // Start the camera when the modal opens
+    }
+
+    function closeAddStudentModal() {
+      const modal = document.getElementById('add-student-modal');
+      modal.style.display = 'none'; // Hide the modal
+      stopCamera(); // Stop the camera when the modal closes
+    }
+
+    const video = document.getElementById('camera-feed');
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function(stream) {
+            video.srcObject = stream;
+            video.play();
+            console.log('Camera feed started');
+        })
+        .catch(function(err) {
+            console.error('Error accessing camera: ', err);
+            alert('Unable to access camera. Please check permissions.');
+        });
+  </script>
   <script src="{% static 'js/capture.js' %}"></script>
-  <script>
-    // Open the Add Student Modal
-    function openAddModal() {
-      document.getElementById('modal-title').textContent = 'Add Student';
-      document.getElementById('student-form').action = '{% url "add-student" %}';
-      document.getElementById('student-lrn').value = '';
-      document.getElementById('first-name').value = '';
-      document.getElementById('middle-name').value = '';
-      document.getElementById('last-name').value = '';
-      document.getElementById('school').value = '';
-      document.getElementById('grade').value = '';
-      document.getElementById('section').value = '';
-      document.getElementById('guardian').value = '';
-      document.getElementById('guardian_email').value = '';
-      document.getElementById('guardian_phone').value = '';
-      document.getElementById('student-modal').style.display = 'block';
-    }
-
-    // Open the Edit Student Modal
-    function openEditModal(lrn, firstName, middleName, lastName, schoolId, grade, sectionId, guardian, guardianEmail, guardianPhone) {
-      document.getElementById('modal-title').textContent = 'Edit Student';
-      document.getElementById('student-form').action = `/edit-student/${lrn}/`;
-      document.getElementById('student-lrn').value = lrn;
-      document.getElementById('first-name').value = firstName;
-      document.getElementById('middle-name').value = middleName;
-      document.getElementById('last-name').value = lastName;
-      document.getElementById('school').value = schoolId;
-      document.getElementById('grade').value = grade;
-      document.getElementById('section').value = sectionId;
-      document.getElementById('guardian').value = guardian;
-      document.getElementById('guardian_email').value = guardianEmail;
-      document.getElementById('guardian_phone').value = guardianPhone;
-      document.getElementById('student-modal').style.display = 'block';
-    }
-
-    // Close the Modal
-    function closeModal() {
-      document.getElementById('student-modal').style.display = 'none';
-      // Release the camera when modal is closed
-      fetch('/stop_webcam/')
-        .then(response => response.json())
-        .then(data => console.log('Camera released:', data))
-        .catch(error => console.error('Error releasing camera:', error));
-    }
-
-    // Close the Confirmation Modal
-    function closeConfirmation() {
-      document.getElementById('confirmation-modal').style.display = 'none';
-      // Also ensure camera is released when confirmation is closed
-      fetch('/stop_webcam/')
-        .then(response => response.json())
-        .then(data => console.log('Camera released:', data))
-        .catch(error => console.error('Error releasing camera:', error));
-    }
-
-    // Handle the Student Form Submission
-    document.getElementById('student-form').addEventListener('submit', function(event) {
-      closeModal();
-      // Show the Confirmation Modal after form submission
-      document.getElementById('confirmation-modal').style.display = 'block';
-      // Optionally, you can use setTimeout to close the confirmation modal after a few seconds
-      setTimeout(function() {
-        closeConfirmation();
-      }, 5000);
-    });
-  </script>
-
   <script src="{% static 'js/students.js' %}"></script>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        // Initial section filter
-        updateSections();
-
-        // Event listeners for school and grade changes
-        document.getElementById('school').addEventListener('change', updateSections);
-        document.getElementById('grade').addEventListener('change', updateSections);
-    });
-
-    function updateSections() {
-        const schoolId = document.getElementById('school').value;
-        const grade = document.getElementById('grade').value;
-        const sections = document.querySelectorAll('#section option');
-        
-        // Reset the visibility of all sections (hide all)
-        sections.forEach(option => {
-            option.style.display = 'none';  // Hide all sections initially
-        });
-
-        // Show sections that match the selected school and grade
-        sections.forEach(option => {
-            const sectionSchoolId = option.getAttribute('data-school');
-            const sectionGrade = option.getAttribute('data-grade');
-            
-            // Show section if it matches the selected school and grade
-            if ((schoolId === '' || schoolId == sectionSchoolId) &&
-                (grade === '' || grade == sectionGrade)) {
-                option.style.display = 'block';  // Show matching sections
-            }
-            else {
-              option.style.display = 'none';
-            }
-        });
-    }
-  </script>
 </body>
 </html>

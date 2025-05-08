@@ -114,8 +114,12 @@
                 <td data-label="Username"> {{ teacher.username }} </td>
                 <td data-label="Password"> ******** </td>
                 <td data-label="Actions">
-                  <button class="edit-btn">Edit</button>
-                  <button class="delete-btn">Delete</button>
+                  {% if not view_only %}
+                    <button class="edit-btn">Edit</button>
+                    <button class="delete-btn">Delete</button>
+                  {% else %}
+                    <span class="view-only">View Only</span>
+                  {% endif %}
                 </td>
               </tr>
               {% empty %}

@@ -68,17 +68,14 @@ class CustomUser(AbstractUser):
 
 # Student Model
 class Student(models.Model):
-    lrn = models.CharField(max_length=12, primary_key=True)  
+    lrn = models.CharField(max_length=12, primary_key=True)
     first_name = models.CharField(max_length=100)
-    middle_name = models.CharField(max_length=100, blank=True)
     last_name = models.CharField(max_length=100)
-    section = models.ForeignKey(Section, on_delete=models.CASCADE)  # Linked to Section
+    section = models.ForeignKey(Section, on_delete=models.CASCADE)
     guardian = models.CharField(max_length=255)
     guardian_phone = models.CharField(max_length=15)
     guardian_email = models.EmailField()
-    is_active = models.BooleanField(default=True)
     face_photo = models.ImageField(upload_to='media/student face/', blank=True, null=True)
-    fingerprint_data = models.FileField(upload_to='media/student fingerprint/', blank=True, null=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.section.name}, Grade {self.section.grade}"

@@ -14,29 +14,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Open the Capture Photo Modal
     function openCaptureModal() {
+        const modal = document.getElementById('add-student-modal');
+        const video = document.getElementById('camera-feed');
+
         modal.style.display = 'block';
-        startCamera();
+
+        // Start the camera feed
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then((stream) => {
+                video.srcObject = stream;
+                video.play();
+            })
+            .catch((error) => {
+                console.error('Error accessing the camera:', error);
+            });
     }
 
     // Close the Capture Photo Modal
     function closeCaptureModal() {
+        const modal = document.getElementById('add-student-modal');
+        const video = document.getElementById('camera-feed');
+
         modal.style.display = 'none';
-        stopCamera();
-        if (filename) {
-            console.log(`Setting face-photo-preview src to /media/student_temp/${filename}`);
-            document.getElementById('face-photo-preview').src = `/media/student_temp/${filename}`;
+
+        // Stop the camera feed
+        const stream = video.srcObject;
+        if (stream) {
+            const tracks = stream.getTracks();
+            tracks.forEach((track) => track.stop());
         }
-        // Also call the stop_webcam endpoint for server-side camera release
-        fetch('/stop_webcam/')
-            .then(response => response.json())
-            .then(data => console.log('Server camera released:', data))
-            .catch(error => console.error('Error releasing server camera:', error));
-        resetModal();
+        video.srcObject = null;
     }
 
     // Start the Camera Feed
     function startCamera() {
         console.log('Attempting to start camera...');
+        const video = document.getElementById('camera-feed'); // Ensure correct reference
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(function(stream) {
                 video.srcObject = stream;
@@ -51,9 +64,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Stop the Camera Feed
     function stopCamera() {
+        const video = document.getElementById('camera-feed');
         if (video.srcObject) {
-            let stream = video.srcObject;
-            let tracks = stream.getTracks();
+            const stream = video.srcObject;
+            const tracks = stream.getTracks();
             tracks.forEach(track => track.stop());
             video.srcObject = null;
             console.log('Camera feed stopped');
@@ -62,29 +76,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Capture Image from Video Feed
     function captureImage() {
+        const canvas = document.getElementById('photo-canvas');
+        const video = document.getElementById('camera-feed');
+        const photoInput = document.getElementById('photo');
+        const capturedPhoto = document.getElementById('captured-photo');
+
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
-        context.save();
-        context.scale(-1, 1); // Flip the image horizontally
-        context.drawImage(video, 0, 0, -canvas.width, canvas.height);
-        context.restore();
-        photoDataURL = canvas.toDataURL('image/png');
+        const context = canvas.getContext('2d');
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
+        const photoDataURL = canvas.toDataURL('image/png');
+        photoInput.value = photoDataURL; // Store the photo as a Base64 string
         capturedPhoto.src = photoDataURL;
         capturedPhoto.style.display = 'block';
         video.style.display = 'none';
-        captureBtn.style.display = 'none';
-        recaptureBtn.style.display = 'inline';
-        saveBtn.style.display = 'inline';
     }
 
     // Recapture Image
     function recaptureImage() {
+        const video = document.getElementById('camera-feed');
+        const capturedPhoto = document.getElementById('captured-photo');
+        const captureBtn = document.querySelector('.capture-btn');
+        const recaptureBtn = document.querySelector('.recapture-btn');
+
+        // Hide the captured photo and show the video feed
         capturedPhoto.style.display = 'none';
         video.style.display = 'block';
+
+        // Show the capture button and hide the recapture button
         captureBtn.style.display = 'inline';
         recaptureBtn.style.display = 'none';
-        saveBtn.style.display = 'none';
     }
 
     // Save the Captured Image to a Temporary Folder (client-side)
@@ -174,4 +196,17 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener('pagehide', function() {
         stopCamera();
     });
+
+    // Start the camera feed
+    const video = document.getElementById('camera-feed');
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function(stream) {
+            video.srcObject = stream;
+            video.play();
+            console.log('Camera feed started');
+        })
+        .catch(function(err) {
+            console.error('Error accessing camera: ', err);
+            alert('Unable to access camera. Please check permissions.');
+        });
 });
