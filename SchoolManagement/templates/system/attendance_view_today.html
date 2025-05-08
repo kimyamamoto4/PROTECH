@@ -1,0 +1,142 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Records</title>
+    <link rel="stylesheet" href="{% static 'css/attendance_view.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <!-- Video Background -->
+    <video autoplay loop muted playsinline class="background-video">
+        <source src="{% static 'images/background.mp4' %}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-container">
+                <img src="{% static 'images/logo white.png' %}" alt="Logo" class="logo">
+                <h1>ATTENDANCE MONITORING SYSTEM</h1>
+            </div>
+            <button class="back-btn" onclick="window.location.href='{% url 'device_selection' %}';">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="device-selection-wrapper">
+        <div class="device-selection-container glossy">
+            <h2>Attendance Records</h2>
+            
+            <!-- Search Bar -->
+            <div class="search-container">
+                <input type="text" class="search-bar" placeholder="Search" id="searchInput">
+                <button class="filter-btn">
+                    <i class="fas fa-filter"></i>
+                </button>
+            </div>
+
+            <!-- Attendance Table -->
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Student Name</th>
+                            <th>LRN</th>
+                            <th>School</th>
+                            <th>Grade</th>
+                            <th>Section</th>
+                            <th>Date</th>
+                            <th>Time In</th>
+                            <th>Time Out</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for attendance in attendances %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ attendance.student.first_name }} {{ attendance.student.last_name }}</td>
+                                <td>{{ attendance.student.lrn }}</td>
+                                <td>{{ attendance.student.section.school.name }}</td>
+                                <td>{{ attendance.student.section.grade }}</td>
+                                <td>{{ attendance.student.section.name }}</td>
+                                <td>{{ attendance.date }}</td>
+                                <td>{{ attendance.time_in }}</td>
+                                <td>{{ attendance.time_out }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="10">No attendance records found.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="copy">
+            <p>© 2024 Attendance Monitoring System. All Rights Reserved.</p>
+        </div>
+        <div class="date-time">
+            <p id="current-date-time"></p>
+        </div>
+    </footer>
+
+    <script>
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            let searchText = this.value.toLowerCase();
+            let table = document.querySelector('.data-table');
+            let rows = table.getElementsByTagName('tr');
+            
+            for (let i = 1; i < rows.length; i++) {
+                let found = false;
+                let cells = rows[i].getElementsByTagName('td');
+                
+                for (let j = 0; j < cells.length; j++) {
+                    let cellText = cells[j].textContent || cells[j].innerText;
+                    
+                    if (cellText.toLowerCase().indexOf(searchText) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+                
+                if (found) {
+                    rows[i].style.display = '';
+                } else {
+                    rows[i].style.display = 'none';
+                }
+            }
+        });
+        
+        // Display current date and time
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            document.getElementById('current-date-time').textContent = now.toLocaleDateString('en-US', options);
+        }
+        
+        // Update date/time initially and every second
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+    </script>
+</body>
+</html>

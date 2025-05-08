@@ -1,0 +1,216 @@
+/* Root Variables */
+:root {
+    --primary-color: #0e0e0e;
+    --secondary-color: #f1f1f1;
+    --tertiary-color: #dadada;
+    --light-gray: #cacaca;
+    --lighter-gray: #ebebeb;
+    --hover-gray: #444444;
+    --border-radius: 5px;
+    --shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    --transition: all 0.3s ease;
+    --padding-standard: 10px;
+    --margin-standard: 10px;
+    --font-stack: Arial, sans-serif;
+}
+
+/* Global Styles */
+body {
+    font-family: var(--font-stack);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Header & Footer Styles */
+.header, .footer-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 30px;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+}
+
+.header, .footer {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    height: 60px;
+    width: auto;
+}
+
+/* Button Styles */
+.admin-btn, .admin-options {
+    text-decoration: none;
+    background-color: var(--secondary-color);
+    border: none;
+    color: var(--primary-color);
+    font-size: medium;
+    font-weight: bold;
+    padding: var(--padding-standard) 15px;
+    cursor: pointer;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.admin-options {
+    background-color: var(--tertiary-color);
+}
+
+.admin-btn:hover, .admin-options:hover {
+    background-color: var(--light-gray);
+}
+
+.admin-options:hover {
+    background-color: #aaaaaa;
+}
+
+/* Registration Layout */
+.main {
+    display: flex;
+    flex: 1;
+    padding: var(--padding-standard);
+    justify-content: center;
+    align-items: center;
+}
+
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    box-sizing: border-box;
+    padding: 30px;
+    padding-top: 10px;
+    width: 60%;
+    max-width: 1200px;
+}
+
+.register-box {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.register-box h2 {
+    text-align: center;
+}
+
+/* Form Elements */
+.input-field, .school, .role, .section-field {
+    padding: var(--padding-standard);
+    border: 1px solid var(--light-gray);
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.form-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 35px;
+    width: 100%;
+    max-width: 1000px; 
+}
+
+.left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: center;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.form-group label, .section {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* Profile Image Styles */
+.profile-image-preview, .upload-button {
+    margin-bottom: 20px;
+}
+
+.profile-image-preview img {
+    max-width: 100%;
+    max-height: 150px;
+    border-radius: 10px;
+}
+
+.upload-button button {
+    background-color: var(--primary-color);
+    width: 40%;
+    font-size: 16px;
+    color: var(--secondary-color);
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.upload-button button:hover {
+    background-color: var(--hover-gray);
+}
+
+/* Submit Button */
+button[type="submit"] {
+    background-color: var(--primary-color);
+    font-size: 16px;
+    color: var(--secondary-color);
+    border: none;
+    padding: var(--padding-standard) 15px;
+    cursor: pointer;
+    border-radius: var(--border-radius);
+    width: 100%;
+    display: block;
+    transition: var(--transition);
+}
+
+button[type="submit"]:hover {
+    background-color: var(--hover-gray);
+}
+
+#section-field {
+    display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .form-container {
+        flex-direction: column;
+    }
+
+    .left-column, .right-column {
+        flex: 1 1 100%;
+    }
+    
+    .register-container {
+        width: 90%;
+        padding: 20px 15px;
+    }
+}

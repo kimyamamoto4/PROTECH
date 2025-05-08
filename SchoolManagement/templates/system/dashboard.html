@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ user_role|title }} Dashboard</title>
+  <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <!-- Background Video -->
+  <video autoplay muted loop class="background-video">
+    <source src="{% static 'images/background.mp4' %}" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="dashboard">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo-container">
+        <img src="{% static 'images/logo white.png' %}" alt="Logo" class="logo">
+      </div>
+      <nav class="nav">
+        <ul>
+          <li class="active">
+            <a href="{% url 'admin-dashboard' %}"><i class="fas fa-home"></i><span>Dashboard</span></a>
+          </li>
+          <li>
+            <a href="{% url 'admin-teachers' %}"><i class="fas fa-chalkboard-teacher"></i><span>Teachers</span></a>
+          </li>
+          <li>
+            <a href="{% url 'admin-students' %}"><i class="fas fa-user-graduate"></i><span>Students</span></a>
+          </li>
+          <li>
+            <a href="{% url 'admin-attendance' %}"><i class="fas fa-calendar-check"></i><span>Attendance</span></a>
+          </li>
+          <li>
+            <a href="{% url 'admin-settings' %}"><i class="fas fa-cog"></i><span>Settings</span></a>
+          </li>
+        </ul>
+      </nav>
+      <div class="logout-section">
+        <button class="logout-btn" type="button" onclick="window.location.href='{% url 'logout' %}'">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="content">
+      <header class="top-bar">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h1>Dashboard Overview</h1>
+          <div style="display: flex; gap: 15px; align-items: center;">
+            <!-- Modern Dark Mode Toggle -->
+            <div class="theme-toggle" title="Toggle Dark Mode">
+              <input type="checkbox" id="darkToggleCheckbox" hidden>
+              <label for="darkToggleCheckbox" class="toggle-label">
+                <i class="fas fa-sun"></i>
+                <i class="fas fa-moon"></i>
+                <span class="toggle-ball"></span>
+              </label>
+            </div>
+
+            <!-- Profile -->
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <img src="{% static 'images/user.png' %}" alt="User" style="width: 36px; height: 36px; border-radius: 50%;">
+              <span>{{ user.username|default:"Admin" }}</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="stats">
+        <!-- Total Admins (Visible only to supervisors) -->
+        {% if total_admins is not None %}
+        <div class="stat-card">
+          <i class="fas fa-user-shield icon"></i>
+          <div class="stat-info">
+            <h3>Total Admins</h3>
+            <p>{{ total_admins }}</p>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Total Teachers (Visible to supervisors and admins) -->
+        {% if total_teachers is not None %}
+        <div class="stat-card">
+          <i class="fas fa-chalkboard-teacher icon"></i>
+          <div class="stat-info">
+            <h3>Total Teachers</h3>
+            <p>{{ total_teachers }}</p>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Total Students (Visible to all roles) -->
+        <div class="stat-card">
+          <i class="fas fa-user-graduate icon"></i>
+          <div class="stat-info">
+            <h3>Total Students</h3>
+            <p>{{ total_students }}</p>
+          </div>
+        </div>
+
+        <!-- Attendance Records (Visible to all roles) -->
+        <div class="stat-card">
+          <i class="fas fa-calendar-check icon"></i>
+          <div class="stat-info">
+            <h3>Attendance Records</h3>
+            <p>{{ total_attendance }}</p>
+          </div>
+        </div>
+      </section>
+      
+    </main>
+  </div>
+  <script src="{% static 'js/dashboard.js' %}"></script>
+  <script>
+    document.getElementById('darkModeToggle').addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    });
+
+    // Load mode from localStorage
+    window.addEventListener('DOMContentLoaded', () => {
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+      }
+    });
+  </script>
+</body>
+</html>

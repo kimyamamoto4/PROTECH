@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} Login</title>
+    <link rel="stylesheet" href="{% static 'css/loginform.css' %}">
+</head>
+<body>
+    <!-- Background Video -->
+    <video autoplay loop muted playsinline class="background-video">
+        <source src="{% static 'images/background.mp4' %}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Header Section -->
+    <header class="header">
+        <div class="header-content">
+            <img src="{% static 'images/logo white.png' %}" alt="Logo" class="logo">
+            <h1 class="header-title">ATTENDANCE MONITORING SYSTEM</h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main login-container">
+        <div class="login-box">
+            <h2>{{ title }} LOGIN</h2>
+            <form action="{{ form_action }}" method="POST">
+                {% csrf_token %}
+                <input type="text" id="username" name="username" placeholder="Username" required>
+                <div class="password-container">
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                </div>
+                {% if error_message %}
+                    <div class="error-message">
+                        {{ error_message }}
+                    </div>
+                {% endif %}
+                <button type="submit" class="admin-btn">Login</button>
+                <button type="button" class="back-btn" onclick="goBack()">← Back</button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <p class="footer-text">© 2025 Attendance Monitoring System. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

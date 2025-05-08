@@ -1,0 +1,32 @@
+/* Styles for the Export Attendance Button */
+.export-btn {
+    background-color: #4CAF50; /* Green color for Excel export */
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.export-btn:hover {
+    background-color: #45a049; /* Darker green on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+.export-btn:active {
+    background-color: #3e8e41; /* Even darker green on click */
+    transform: translateY(0); /* Reset lift effect */
+}
+
+.export-btn i {
+    font-size: 18px; /* Icon size */
+}

@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Selection - Attendance Monitoring System</title>
+    <link rel="stylesheet" href="{% static 'css/device_selection.css' %}">
+</head>
+<body>
+    <!-- Video Background -->
+    <video autoplay loop muted playsinline class="background-video">
+        <source src="{% static '/images/background.mp4' %}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Header -->
+    <header class="header">
+        <img src="{% static 'images/logo white.png' %}" alt="Logo">
+        <h1>ATTENDANCE MONITORING SYSTEM</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="device-selection-wrapper">
+            <div class="device-selection-container">
+                <h2>What Device Are You Using?</h2>
+                <div class="device-button">
+                    <button class="admin-options" onclick="window.location.href='{% url 'front-camera' %}';">
+                        <img src="{% static 'images/camera-icon.gif' %}" alt="Camera Icon"> Front Camera (Time-In)
+                    </button>
+
+                    <button class="back-camera-btn" onclick="window.location.href='{% url 'back-camera' %}';">
+                        <img src="{% static 'images/camera-icon.gif' %}" alt="Camera Icon"> Back Camera (Time-Out)
+                    </button>
+
+                    <button class="admin-btn" onclick="openModal();">
+                        <img src="{% static 'images/admin-icon.gif' %}" alt="Settings Icon"> Admin Login
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer-main">
+        <div class="datetime">
+            <p id="date-time"></p>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div id="admin-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>ADMIN OPTIONS</h2>
+            <div class="button-container">
+                <button class="admin-options" onclick="window.location.href='/supervisor-login';">PRINCIPAL</button>
+                <button class="admin-options" onclick="window.location.href='/admin-login';">ADMIN</button>
+                <button class="admin-options" onclick="window.location.href='/teacher-login';">TEACHER</button>
+                <button class="admin-options" onclick="window.location.href='{% url 'attendance_view_today' %}';">ATTENDANCE</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Open the modal
+        function openModal() {
+            document.getElementById("admin-modal").style.display = "block";
+        }
+
+        // Close the modal
+        function closeModal() {
+            document.getElementById("admin-modal").style.display = "none";
+        }
+
+        // Close the modal when clicking outside of it
+        window.onclick = function(event) {
+            var modal = document.getElementById("admin-modal");
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        };
+
+        // Date time display
+        function updateDateTime() {
+            var now = new Date();
+            var dateTimeString = now.toLocaleString();
+            document.getElementById("date-time").textContent = dateTimeString;
+        }
+        
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+    </script>
+</body>
+</html>

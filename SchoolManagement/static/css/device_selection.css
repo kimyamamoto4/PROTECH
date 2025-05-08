@@ -1,0 +1,315 @@
+/* Root Variables */
+:root {
+    --primary-color: #0e0e0e;
+    --secondary-color: #ffffff;
+    --success-color: #15be39;
+    --success-hover: #107c16;
+    --danger-color: #ee4f44;
+    --danger-hover: #a32a2a;
+    --primary-blue: #2a90fd;
+    --primary-blue-hover: #1c63af;
+    --border-radius: 15px;
+    --shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    --font-stack: Arial, sans-serif;
+}
+
+/* Global Styles */
+body {
+    font-family: var(--font-stack);
+    margin: 0;
+    padding: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Fallback background color */
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full viewport height */
+    overflow: hidden; /* Prevent scrolling */
+    color: #fff; /* Ensure text is readable */
+}
+
+/* Video Background */
+.background-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1; /* Ensure it stays behind all other content */
+}
+
+/* Header Styles */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the content horizontally */
+    padding: 20px 20px;
+    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black background */
+    color: var(--secondary-color);
+    width: 100%; /* Full width */
+    position: fixed; /* Keep the header fixed at the top */
+    top: 0; /* Stick to the very top */
+    left: 0; /* Align to the left */
+    z-index: 1000;
+    border-radius: 0 0 15px 15px; /* Round only the bottom corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Add shadow for better visibility */
+}
+
+.header img {
+    position: absolute; /* Position the logo on the left */
+    left: 20px;
+    height: 50px;
+}
+
+.header h1 {
+    font-size: 20px;
+    margin: 0;
+    text-align: center;
+}
+
+/* Main Content */
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    height: 100%; /* Full height minus header and footer */
+    padding-top: 80px; /* Add space for the fixed header */
+    padding-bottom: 50px; /* Add space for the fixed footer */
+}
+
+/* Center the Content */
+.device-selection-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Full viewport height */
+    text-align: center;
+    padding-top: -20px; /* Add spacing from the top */
+}
+
+/* Transparent Panel for Buttons */
+.device-selection-container {
+    background-color: rgba(255, 255, 255, 0.541); /* Slightly darker transparent white */
+    padding: 30px;
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+    text-align: center;
+    width: 350px; /* Fixed width for consistent layout */
+}
+
+/* Heading Style */
+.device-selection-container h2 {
+    font-size: 26px; /* Larger font size */
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333; /* Darker text color */
+    font-family: 'Arial', sans-serif; /* Better font */
+}
+
+/* Button Styles */
+.device-button {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.device-button button {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Align icon and text to the left */
+    padding: 15px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--secondary-color);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    box-shadow: var(--shadow);
+    background-color: #f5f5f5; /* Light gray background */
+    color: #333; /* Darker text color */
+    border-left: 5px solid transparent; /* Add a left border for visual effect */
+    position: relative;
+}
+
+.device-button button img {
+    height: 30px; /* Larger icon size */
+    margin-right: 15px; /* Space between icon and text */
+    opacity: 0.8; /* Slightly dim the icon */
+}
+
+.device-button button::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #ddd; /* Light gray line */
+}
+
+.device-button button:last-child::after {
+    display: none; /* Remove line for the last button */
+}
+
+.device-button button:hover {
+    background-color: #e0e0e0; /* Slightly darker gray on hover */
+    transform: scale(1.02); /* Slight zoom effect */
+}
+
+/* Override button styles for specific roles */
+.device-button .admin-options {
+    background-color: var(--success-color); /* Green background */
+    color: white; /* White text */
+    border-left: none; /* Remove left border */
+}
+
+.device-button .admin-options:hover {
+    background-color: var(--success-hover); /* Darker green on hover */
+    transform: scale(1.02); /* Slight zoom effect */
+}
+
+.device-button .back-camera-btn {
+    background-color: var(--danger-color); /* Red background */
+    color: white; /* White text */
+    border-left: none; /* Remove left border */
+}
+
+.device-button .back-camera-btn:hover {
+    background-color: var(--danger-hover); /* Darker red on hover */
+    transform: scale(1.02); /* Slight zoom effect */
+}
+
+.device-button .admin-btn {
+    background-color: var(--primary-blue); /* Blue background */
+    color: white; /* White text */
+    border-left: none; /* Remove left border */
+}
+
+.device-button .admin-btn:hover {
+    background-color: var(--primary-blue-hover); /* Darker blue on hover */
+    transform: scale(1.02); /* Slight zoom effect */
+}
+
+/* Footer Styles */
+.footer-main {
+    text-align: center;
+    padding: 10px;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    width: 100%; /* Ensure it spans the full width */
+    position: fixed; /* Keep the footer fixed at the bottom */
+    bottom: 0;
+    z-index: 1000;
+}
+
+.footer-main .datetime {
+    font-size: 14px;
+}
+
+/* Modal Styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000; /* Ensure it appears above other elements */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Prevent scrolling */
+    background-color: rgba(0, 0, 0, 0.7); /* Darker semi-transparent background */
+    backdrop-filter: blur(5px); /* Add a blur effect for a modern look */
+    animation: fadeIn 0.3s ease-in-out; /* Smooth fade-in animation */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #ffffff;
+    margin: 5% auto; /* Center the modal vertically and horizontally */
+    padding: 30px;
+    border-radius: 15px; /* Rounded corners */
+    width: 450px; /* Fixed width */
+    max-width: 90%; /* Responsive for smaller screens */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Stronger shadow for depth */
+    text-align: center;
+    position: relative;
+    animation: slideIn 0.4s ease-out; /* Smooth slide-in animation */
+}
+
+/* Modal Header */
+.modal-content h2 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333; /* Darker text color */
+    font-family: 'Arial', sans-serif;
+    border-bottom: 2px solid #f0f0f0; /* Subtle divider */
+    padding-bottom: 10px;
+}
+
+/* Button Container */
+.modal-content .button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Add spacing between buttons */
+    margin-top: 20px;
+}
+
+/* Buttons */
+.modal-content .button-container button {
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 8px; /* Slightly rounded buttons */
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for buttons */
+}
+
+.modal-content .button-container .admin-options {
+    background-color: var(--primary-blue); /* Blue background */
+}
+
+.modal-content .button-container .admin-options:hover {
+    background-color: var(--primary-blue-hover); /* Darker blue on hover */
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+/* Close Button */
+.modal-content .close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.modal-content .close:hover {
+    color: #333; /* Darker color on hover */
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
