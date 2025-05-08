@@ -54,6 +54,7 @@ urlpatterns = [
     path('admin-students', views.admin_students_view, name='admin-students'),
     path('admin-attendance', views.admin_attendance_view, name='admin-attendance'),
     path('admin-settings', views.admin_settings_view, name='admin-settings'),
+    # Other URLs...
     
     # Teacher routes
     path('teacher-dashboard', views.teacher_dashboard_view, name='teacher-dashboard'),

@@ -707,6 +707,7 @@ def admin_dashboard_view(request):
 
     context = {
         'user_role': 'admin',
+        'active_page': 'dashboard',  # Highlight "Dashboard" in the sidebar
         'total_teachers': total_teachers,
         'total_students': total_students,
         'total_attendance': total_attendance
@@ -725,6 +726,7 @@ def admin_teachers_view(request):
     
     return render(request, 'system/teachers.html', {
         'user_role': 'admin',
+        'active_page': 'teachers',  # Highlight "Teachers" in the sidebar
         'teachers': teachers,
         'grades': grades,
         'sections': sections,
@@ -736,13 +738,14 @@ def admin_teachers_view(request):
 @admin_required
 def admin_students_view(request):
     """View for administrators to manage students"""
-    grades = range(7, 13)  
+    grades = range(7, 13)
     sections = Section.objects.all()
     students = Student.objects.select_related('section__school').all()
     schools = School.objects.all()
     
     return render(request, 'system/students.html', {
         'user_role': 'admin',
+        'active_page': 'students',  # Highlight "Students" in the sidebar
         'grades': grades,
         'sections': sections,
         'students': students,
@@ -800,7 +803,10 @@ def admin_attendance_view(request):
 @admin_required
 def admin_settings_view(request):
     """Settings view for administrators"""
-    return render(request, 'system/settings.html', {'user_role': 'admin'})
+    return render(request, 'system/settings.html', {
+        'user_role': 'admin',
+        'active_page': 'settings',  # Highlight "Settings" in the sidebar
+    })
 
 @login_required
 @admin_required

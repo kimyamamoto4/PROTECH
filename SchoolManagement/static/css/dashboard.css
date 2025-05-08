@@ -362,5 +362,173 @@ body.dark-mode .logout-btn:hover {
 }
 
 body.dark-mode .content {
-  background-color: #0f172a; /* Match dark mode background */
+  background-color: #0f172ac4; /* Match dark mode background */
+}
+
+/* Updated Table Styling with Borders */
+.table-container {
+  margin-top: 20px;
+  overflow-x: auto; /* Ensure responsiveness for smaller screens */
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: var(--bg); /* Match the main background */
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse; /* Ensure borders don't double up */
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.data-table thead {
+  background-color: #1e293b; /* Dark blue header */
+  color: #ffffff; /* White text for contrast */
+  text-align: left;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.data-table thead th {
+  padding: 15px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid #334155; /* Add border to header cells */
+}
+
+.data-table tbody {
+  background-color: #ffffff; /* White body */
+}
+
+.data-table tbody tr {
+  border: 1px solid #e5e7eb; /* Add border to rows */
+  transition: background-color 0.3s ease;
+}
+
+.data-table tbody tr:hover {
+  background-color: #f1f5f9; /* Light gray hover for better visibility */
+}
+
+.data-table tbody td {
+  padding: 15px;
+  font-size: 0.9rem;
+  color: #334155; /* Black text for better readability */
+  border: 1px solid #e5e7eb; /* Add border to cells */
+}
+
+.data-table tbody td:first-child {
+  font-weight: 600; /* Bold the first column */
+}
+
+.data-table tbody td:last-child {
+  text-align: center;
+}
+
+.data-table tbody tr.no-data td {
+  text-align: center;
+  font-style: italic;
+  color: #9ca3af; /* Gray for no data message */
+}
+
+/* Action Buttons */
+.edit-btn,
+.delete-btn {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-btn {
+  background-color: #1e293b; /* Dark blue for edit */
+  color: #ffffff; /* White text for contrast */
+}
+
+.edit-btn:hover {
+  background-color: #334155; /* Slightly lighter blue on hover */
+}
+
+.delete-btn {
+  background-color: #ef4444; /* Red for delete */
+  color: #ffffff;
+}
+
+.delete-btn:hover {
+  background-color: #dc2626;
+}
+
+/* Search Container Styling */
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-bar {
+  width: 100%;
+  max-width: 300px;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-bar:focus {
+  border-color: #3b82f6; /* Blue border on focus */
+  box-shadow: 0 0 5px rgba(59, 130, 246, 0.5); /* Subtle blue glow */
+}
+
+.filter-btn {
+  background-color: #3b82f6; /* Blue background */
+  color: #ffffff; /* White icon */
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.filter-btn:hover {
+  background-color: #2563eb; /* Darker blue on hover */
+}
+
+.filter-btn i {
+  font-size: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .data-table thead {
+    display: none; /* Hide table headers on small screens */
+  }
+
+  .data-table tbody tr {
+    display: block;
+    margin-bottom: 15px;
+    border: 1px solid #e5e7eb; /* Subtle border for rows */
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  .data-table tbody td {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    font-size: 0.85rem;
+  }
+
+  .data-table tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #334155; /* Black text for better readability */
+    margin-right: 10px;
+  }
 }
